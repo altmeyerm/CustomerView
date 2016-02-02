@@ -5,6 +5,7 @@ class CustomersController < ApplicationController
   # GET /customers.json
   def index
     @customers = Customer.all
+    
   end
 
   # GET /customers/1
@@ -14,7 +15,7 @@ class CustomersController < ApplicationController
 
   # GET /customers/new
   def new
-    @customer = Customer.new
+    @customer = Customer.new(firstname: "",lastname:"",age:0)
   end
 
   # GET /customers/1/edit
@@ -24,8 +25,7 @@ class CustomersController < ApplicationController
   # POST /customers
   # POST /customers.json
   def create
-    @customer = Customer.new(customer_params)
-
+  
     respond_to do |format|
       if @customer.save
         format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
@@ -35,13 +35,16 @@ class CustomersController < ApplicationController
         format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
+    
   end
 
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update
+    
     respond_to do |format|
-      if @customer.update(customer_params)
+     
+      if @customer.update_attributes(customer_params)
         format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
@@ -49,6 +52,7 @@ class CustomersController < ApplicationController
         format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
+    
   end
 
   # DELETE /customers/1
@@ -69,6 +73,6 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params[:customer]
+       params.require(:customer).permit(:firstname, :lastname, :age)
     end
 end
